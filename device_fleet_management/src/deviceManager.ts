@@ -20,14 +20,16 @@ export class DeviceManager {
     }
 
     addDevice(device: Device): void {
-      if (device.id == null || device.id === "" || this.devices.has(device.id))
-        throw new Error("Error adding new device: Device ID empty");
+      if (device.id == "")
+        throw new Error("Device must have an id");
+      else if (this.devices.has(device.id))
+        throw new Error(`Device with id ${device.id} already exists`);
       this.devices.set(device.id, device);
     }
 
     removeDevice(id: string): void {
       if (!this.devices.delete(id))
-          throw new Error("ERR:RemoveDevice:InvalidID");
+          throw new Error(`Device with id ${id} not found`);
     }
 
     getDevice(id: string): Device | null {
@@ -35,90 +37,62 @@ export class DeviceManager {
     }
 
     getDevicesByVersion(version: string): Device[] | null {
-      let iter = this.devices.values();
-      let matches: Device[] = [];
-      let curr: Device | undefined = iter.next().value;
-
-      while (curr !== undefined) {
-        if (curr.version === version) {
-          matches.push(curr);
-        }
-        curr = iter.next().value;
-      }
-
-      return matches.length === 0 ? null : matches;
+      let matches = [...this.devices.values()]
+      matches = matches.filter(function(d) {
+        return d.version == version;
+      });
+      return matches;
     }
 
     getDevicesByUserId(user_id: string): Device[] | null {
-      let iter = this.devices.values();
-      let matches: Device[] = [];
-      let curr: Device | undefined = iter.next().value;
-
-      while (curr !== undefined) {
-        if (curr.user_id === user_id) {
-          matches.push(curr);
-        }
-        curr = iter.next().value;
-      }
-
-      return matches.length === 0 ? null : matches;
+      let matches = [...this.devices.values()]
+      matches = matches.filter(function(d) {
+        return d.user_id == user_id;
+      });
+      return matches;
     }
 
     getDevicesByStatus(status: 'active' | 'inactive' | 'pending' | 'failed'): Device[] | null {
-      let iter = this.devices.values();
-      let matches: Device[] = [];
-      let curr: Device | undefined = iter.next().value;
-
-      while (curr !== undefined) {
-        if (curr.status === status) {
-          matches.push(curr);
-        }
-        curr = iter.next().value;
-      }
-
-      return matches.length === 0 ? null : matches;
+      let matches = [...this.devices.values()]
+      matches = matches.filter(function(d) {
+        return d.status == status;
+      });
+      return matches;
     }
 
     getDevicesInArea(latitude: number, longitude: number, radius_km: number): Device[] | null {
       // returns all devices within a radius of the given latitude and longitude
       // the radius is in kilometers
-      /*let iter = this.devices.values();
-      let matches: Device[] = [];
-      let curr: Device | undefined = iter.next().value;
-
-      while (curr !== undefined) {
-        if (curr.status === status) {
-          matches.push(curr);
-        }
-        curr = iter.next().value;
-      }
-
-      return matches.length === 0 ? null : matches;*/
-      return null
+      let matches = [...this.devices.values()]
+      matches = matches.filter((d: Device) => !(d.location.longitude === longitude && d.location.latitude === latitude) && DeviceManager.isDeviceWithinRange(d.location.latitude, latitude, d.location.longitude, longitude, radius_km));
+      return matches;
     }
 
-    deviceWithinRange(lat1: number, lat2: number, long1: number, long2: number, number: number): boolean {
-      // phi = latitude
-      // lambda == longitude
-      // hav(theta) = hav(delta phi) + cos(phi1)cos(phi2)hav(delta lambda)
-
-      // x: number = 2*Math.asin(Math.sqrt(Math.sin((lat2 - lat1)/2)^2))
-
-
-      return false;
+    static isDeviceWithinRange(lat1: number, lat2: number, long1: number, long2: number, radius_km: number): boolean {
+      const degToRad = (x: number) => x*Math.PI/180;
+      const R = 6173;
+      let deltaLat = degToRad(lat2 - lat2);
+      let deltaLong = degToRad(long2 - long1);
+      let lat1Rad = degToRad(lat1);
+      let lat2Rad = degToRad(lat2);
+      let a: number = Math.sin(deltaLat/2)**2 + Math.sin(deltaLong/2)**2*Math.cos(lat1Rad)*Math.cos(lat2Rad);
+      let c: number = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      let d: number = R*c;
+      return d < radius_km;
     }
 
     getDevicesNearDevice(device_id: string, radius_km: number): Device[] | null {
       // returns all devices within a radius of the given device (not including the device itself)
       // the radius is in kilometers
-      return null;
+      let device: Device | undefined = this.devices.get(device_id)
+      return device === undefined ? null : this.getDevicesInArea(device.location.latitude, device.location.longitude, radius_km);
     }
 
     getAllDevices(): Device[] {
-        return [];
+        return [...this.devices.values()]
     }
 
     getDeviceCount(): number {
-        return 0;
+        return this.devices.size;
     }
 }
