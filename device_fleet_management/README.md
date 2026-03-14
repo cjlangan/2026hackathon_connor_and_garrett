@@ -1,8 +1,14 @@
 # Device Fleet Management
 
-A simulated fleet management system for a tech company. Your team is implementing test driven development and as such they have written tests to outline all of the required functionality. Your task is to implement the core manager classes that handle users, devices, and their relationships.
+A simulated fleet management system for a tech company. Your team is
+implementing test driven development and as such they have written tests to
+outline all of the required functionality. Your task is to implement the core
+manager classes that handle users, devices, and their relationships.
 
-**DO NOT modify any of the test files or any of the function signatures.** When evaluating we will be running tests to check for valid implementations, and your score on this section will be proportional to the amount of tests that pass relative to other teams
+**DO NOT modify any of the test files or any of the function signatures.** When
+evaluating we will be running tests to check for valid implementations, and
+your score on this section will be proportional to the amount of tests that
+pass relative to other teams
 
 ## Getting Started
 
@@ -24,13 +30,15 @@ npm test
 npm run test:coverage
 ```
 
-Tests are located in the `tests/` folder. Your goal is to make all tests pass by implementing the functionality in the `src/` folder.
+Tests are located in the `tests/` folder. Your goal is to make all tests pass
+by implementing the functionality in the `src/` folder.
 
 ---
 
 ## Your Challenge
 
-You need to implement three manager classes. The method signatures and interfaces are already defined—you just need to fill in the logic.
+You need to implement three manager classes. The method signatures and
+interfaces are already defined—you just need to fill in the logic.
 
 ### 1. UserManager (`src/userManager.ts`)
 

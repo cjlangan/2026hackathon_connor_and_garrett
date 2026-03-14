@@ -14,16 +14,31 @@ export class FleetManager {
         return this.userManager.addUser(user);
     }
 
+// | `removeUser(id)` | Remove a user **AND all their associated devices**. |
     removeUser(id: string): void {
+        let u = this.getUser(id);
+
         //when we remove a user, we need to make sure all devices associated with the user are also removed
+        if (u != null) {
+          this.userManager.removeUser(id);
+          let devices = this.getUserDevices(id);
+
+          for (let i = 0; i < devices.length; i++) {
+            this.removeDevice(devices[i].id);
+          }
+        }
     }
 
     getUser(id: string): User | null {
         return this.userManager.getUser(id) ?? null;
     }
 
+// | `addDevice(device)` | Add a device, but **only if its `user_id` references a valid user**. Throw an error if the user doesn't exist. |
     addDevice(device: Device): void {
-        // when we add a device, we need to make sure it has a valid user_id
+      // when we add a device, we need to make sure it has a valid user_id
+      let user_id = device.id;
+      this.userManager.getUser(user_id);
+      this.deviceManager.addDevice(device);
     }
 
     removeDevice(id: string): void {
