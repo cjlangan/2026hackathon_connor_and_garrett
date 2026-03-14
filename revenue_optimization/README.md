@@ -1,10 +1,17 @@
 # Bar Screen Ad Scheduling
 
-A simulated ad scheduling system for screens across multiple areas in a venue — such as the main hall, bar, and patio. Your task is to implement the core scheduling logic: validating ad placements, calculating revenue, comparing schedules, and ultimately building an optimized ad schedule.
+A simulated ad scheduling system for screens across multiple areas in a venue —
+such as the main hall, bar, and patio. Your task is to implement the core
+scheduling logic: validating ad placements, calculating revenue, comparing
+schedules, and ultimately building an optimized ad schedule.
 
-This project uses **test-driven development (TDD)**. The test suite is already written and defines all required behaviour. Your job is to make every test pass.
+This project uses **test-driven development (TDD)**. The test suite is already
+written and defines all required behaviour. Your job is to make every test
+pass.
 
-> **DO NOT modify any test files or any function signatures.** Evaluation is based on automated test runs, and your score is proportional to the number of tests that pass relative to other teams.
+> **DO NOT modify any test files or any function signatures.** Evaluation is
+> based on automated test runs, and your score is proportional to the number of
+> tests that pass relative to other teams.
 
 ---
 
@@ -49,7 +56,8 @@ npm test
 npm run test:coverage
 ```
 
-Tests live in the `tests/` folder. Your goal is to make all tests pass by implementing the functionality in the `src/` folder.
+Tests live in the `tests/` folder. Your goal is to make all tests pass by
+implementing the functionality in the `src/` folder.
 
 ---
 
@@ -74,7 +82,8 @@ Think of it as a pipeline: **placement validity → revenue calculation → sche
 
 ## Data Models
 
-All data models are defined in `src/placementEngine.ts`. You will use these throughout all three classes.
+All data models are defined in `src/placementEngine.ts`. You will use these
+throughout all three classes.
 
 ```typescript
 interface Ad {
